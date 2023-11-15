@@ -7,7 +7,7 @@ Estamos habilitados para interactuar con la base de datos
 -nanoid para generar valores random
 */
 import * as express from "express";
-import { firestore, rtdb } from "./db.js";
+import { firestore, rtdb } from "db.js";
 import { nanoid } from "nanoid";
 import "dotenv/config";
 import * as cors from "cors";
