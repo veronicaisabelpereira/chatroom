@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev-back": "nodemon ---watch ./back/index.ts --exec ts-node ./back/dev.ts",
-    "dev-front": "parcel serve ./front/index.html",
-    "build:front": "parcel build ./front/index.html",
+    "dev-front": "parcel serve ./src/index.html",
+    "build:front": "parcel build ./src/index.html",
     "build:back": "tsc",
     "build": "yarn build:front && yarn build:back",
     "start": "node ./back/dev.js"
