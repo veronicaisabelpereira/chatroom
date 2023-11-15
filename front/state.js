@@ -1,7 +1,7 @@
-import { rtdb } from "./rtdb";
+import { rtdb } from "./db";
 //para tratar un objeto de objetos como un array
 import { map } from "lodash";
-const API_BASE_URL = "https://chatroom-fxip.onrender.com";
+const API_BASE_URL = "http://localhost:3000";
 //
 const state = {
     data: {
