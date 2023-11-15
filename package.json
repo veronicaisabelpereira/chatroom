@@ -2,6 +2,7 @@
   "name": "back",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "dev-back": "nodemon ---watch ./back/index.ts --exec ts-node ./back/dev.ts",
     "dev-front": "parcel serve ./front/index.html",
