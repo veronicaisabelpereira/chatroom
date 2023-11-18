@@ -1,9 +1,12 @@
-import { rtdb } from "./db";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.state = void 0;
+var db_1 = require("./db");
 //para tratar un objeto de objetos como un array
-import { map } from "lodash";
-const API_BASE_URL = "http://localhost:3000";
+var lodash_1 = require("lodash");
+var API_BASE_URL = "http://localhost:3000";
 //
-const state = {
+var state = {
     data: {
         fullName: "",
         userId: "",
@@ -13,23 +16,24 @@ const state = {
         rtdbRoomId: "", //id complejo
     },
     listeners: [],
-    init() {
-        const lastStorageState = localStorage.getItem("state");
+    init: function () {
+        var lastStorageState = localStorage.getItem("state");
     },
     //usa el rtdbRoomId
-    listenRoom() {
-        const cs = this.getState();
+    listenRoom: function () {
+        var _this = this;
+        var cs = this.getState();
         //Referencia al lugar de la base de datos
-        const chatroomRef = rtdb.ref("/rooms/" + cs.rtdbRoomId);
+        var chatroomRef = db_1.rtdb.ref("/rooms/" + cs.rtdbRoomId);
         //Escuchamos cambios
-        chatroomRef.on("value", (snapshot) => {
+        chatroomRef.on("value", function (snapshot) {
             //optener ultima version del estado cada vez que cambia
-            const currentState = this.getState();
-            const messageFromServer = snapshot.val();
+            var currentState = _this.getState();
+            var messageFromServer = snapshot.val();
             console.log(messageFromServer);
-            const messagesList = map(messageFromServer.messages);
+            var messagesList = (0, lodash_1.map)(messageFromServer.messages);
             currentState.messages = messagesList;
-            this.setState(currentState);
+            _this.setState(currentState);
         });
     },
     //METODOS ESPECIFICOS
@@ -37,24 +41,25 @@ const state = {
     //email y fullName
     //roomId
     //messages
-    setEmailAndFullname(email, fullName) {
-        const cs = this.getState();
+    setEmailAndFullname: function (email, fullName) {
+        var cs = this.getState();
         cs.email = email;
         cs.fullName = fullName;
         this.setState(cs);
     },
-    setRoomId(roomId) {
-        const cs = this.getState();
+    setRoomId: function (roomId) {
+        var cs = this.getState();
         cs.roomId = roomId;
         this.setState(cs);
     },
-    setMessage(message) {
-        const cs = this.getState();
-        cs.messages.push({ message, fullName: cs.fullName });
+    setMessage: function (message) {
+        var cs = this.getState();
+        cs.messages.push({ message: message, fullName: cs.fullName });
     },
     //METODO PARA AUTENTICARSE
-    signIn(callback) {
-        const cs = this.getState();
+    signIn: function (callback) {
+        var _this = this;
+        var cs = this.getState();
         //Preguntamos si el cs tiene un email,
         //de tener va a ir al endpoint auth de la api mediante fetch
         if (cs.email) {
@@ -67,13 +72,13 @@ const state = {
                     email: cs.email,
                 }),
             })
-                .then((res) => {
+                .then(function (res) {
                 return res.json();
             })
-                .then((data) => {
+                .then(function (data) {
                 cs.userId = data.id;
                 console.log("Cambio el state por signin: ");
-                this.setState(cs);
+                _this.setState(cs);
                 callback(); //aviso que todo termino bien
                 console.log("Desde signin al invocar el endpoint auth en la res devuelve el id de usuario: ", data);
             });
@@ -85,8 +90,9 @@ const state = {
     },
     //FUNCION PARA PEDIR NUEVO ROOM---
     //lleva un cb para avisar que el nuevo room esta creado y pedir el id complejo
-    askNewRoom(callback) {
-        const cs = this.getState();
+    askNewRoom: function (callback) {
+        var _this = this;
+        var cs = this.getState();
         //pregunta si tiene userId para poder crear ese room
         if (cs.userId) {
             console.log("este es el userId que llega para askNew: ", cs.userId);
@@ -99,12 +105,12 @@ const state = {
                     userId: cs.userId,
                 }),
             }) //parea respuesta de la api a json pq sino es un texto
-                .then((res) => {
+                .then(function (res) {
                 return res.json();
             }) //devuelve id simple, el que se ve
-                .then((data) => {
+                .then(function (data) {
                 cs.roomId = data.id; //el facil de recordar
-                this.setState(cs);
+                _this.setState(cs);
                 if (callback) {
                     callback();
                 }
@@ -116,24 +122,25 @@ const state = {
     },
     //y tambien tiene un callback para avisar que termino y pueda comenzar a intercambiar msjs
     //ACCEDER A UN ROOM EXISTENTE
-    accessToRoom(callback) {
-        const cs = this.getState();
-        const roomId = cs.roomId;
+    accessToRoom: function (callback) {
+        var _this = this;
+        var cs = this.getState();
+        var roomId = cs.roomId;
         fetch(API_BASE_URL + "/rooms/" + roomId + "?userId=" + cs.userId) //parea respuesta de la api a json pq sino es un texto
-            .then((res) => {
+            .then(function (res) {
             return res.json();
         }) //devuelve id simple, el que se ve
-            .then((data) => {
+            .then(function (data) {
             cs.rtdbRoomId = data.rtdbRoomId;
-            this.setState(cs);
-            this.listenRoom();
+            _this.setState(cs);
+            _this.listenRoom();
             if (callback)
                 callback(); //aviso que todo termino bien
         });
     },
     //Agregar msjs a messages que viajan al backend + nombre, no altera el state
-    pushMessage(message) {
-        const cs = this.getState();
+    pushMessage: function (message) {
+        var cs = this.getState();
         fetch(API_BASE_URL + "/messages", {
             method: "post",
             headers: {
@@ -145,19 +152,20 @@ const state = {
                 fullName: cs.fullName,
                 roomId: cs.roomId,
             }),
-        }).then((res) => {
+        }).then(function (res) {
             return res.json();
         });
     },
     /////
     ///METODOS CLASICOS
-    getState() {
+    getState: function () {
         return this.data;
     },
     ////
-    setState(newState) {
+    setState: function (newState) {
         this.data = newState;
-        for (const cb of this.listeners) {
+        for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
+            var cb = _a[_i];
             cb();
         }
         //guardamos en el localStorage
@@ -166,9 +174,9 @@ const state = {
     },
     /////
     //avisa cambios
-    subscribe(callback) {
+    subscribe: function (callback) {
         this.listeners.push(callback);
     },
     //acceder a un room existente
 };
-export { state };
+exports.state = state;

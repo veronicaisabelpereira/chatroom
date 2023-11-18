@@ -1,11 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //Importamos custom-elements y router. Importante para que funcionen + state
-import "./pages/welcome";
-import "./pages/chat";
-import "./router";
-import "./db";
-import { state } from "./state";
+require("./pages/welcome");
+require("./pages/chat");
+require("./router");
+require("./db");
+var state_1 = require("./state");
 //inicializa el state revisando los msjs de la base de datos
 (function () {
-    state.init();
-    state.listenRoom();
+    state_1.state.init();
+    state_1.state.listenRoom();
 })();

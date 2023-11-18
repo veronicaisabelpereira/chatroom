@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-  }
+    "module": "CommonJS",
+    "target": "ES5",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "strictNullChecks": false,
+   
+  "files": ["./back/index.ts"],
+  "include": ["src/**/*", "back/**/*"]
 }
