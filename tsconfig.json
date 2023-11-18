@@ -4,8 +4,8 @@
     "target": "ES5",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "strictNullChecks": false,
-   
+    "strictNullChecks": false
+  },
   "files": ["./back/index.ts"],
   "include": ["src/**/*", "back/**/*"]
 }
