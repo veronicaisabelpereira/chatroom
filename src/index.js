@@ -5,7 +5,7 @@ require("./pages/welcome");
 require("./pages/chat");
 require("./router");
 require("./db");
-var state_1 = require("./state");
+const state_1 = require("./state");
 //inicializa el state revisando los msjs de la base de datos
 (function () {
     state_1.state.init();

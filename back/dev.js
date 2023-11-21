@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var dotenv = require("dotenv");
+const dotenv = require("dotenv");
 dotenv.config();
 require("./index");

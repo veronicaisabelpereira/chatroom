@@ -8,29 +8,29 @@ Estamos habilitados para interactuar con la base de datos
 -nanoid para generar valores random
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
-var db_1 = require("./db");
-var nanoid_1 = require("nanoid");
+const express = require("express");
+const db_1 = require("./db");
+const nanoid_1 = require("nanoid");
 require("dotenv/config");
-var cors = require("cors");
+const cors = require("cors");
 //
-var port = process.env.PORT || 3000;
-var app = express();
+const port = process.env.PORT || 3000;
+const app = express();
 //Middleware
 app.use(express.static("dist"));
 app.use(express.json());
 app.use(cors());
 //REFERENCIAS A LAS COLECCIONES
-var userCollection = db_1.firestore.collection("users");
-var roomsCollection = db_1.firestore.collection("/rooms");
+const userCollection = db_1.firestore.collection("users");
+const roomsCollection = db_1.firestore.collection("/rooms");
 ////SIGNUP//////////
 /*
 Crea un nuevo usuario e informa si se ingresa un email que ya existe
 */
-app.post("/signup", function (req, res) {
+app.post("/signup", (req, res) => {
     //Se pasa un email y nombre por el body
-    var email = req.body.email;
-    var nombre = req.body.nombre;
+    const email = req.body.email;
+    const nombre = req.body.nombre;
     /*
     se revisa en base de datos si existe un users con mail y id pasado.
     para eso se usa la funcion where.
@@ -41,7 +41,7 @@ app.post("/signup", function (req, res) {
     userCollection //refe de la coleeccion users
         .where("email", "==", email)
         .get()
-        .then(function (searchResponse) {
+        .then((searchResponse) => {
         //preguntamos si la respuesta llega vacia (es decir el email ingresado no existe)
         if (searchResponse.empty) {
             /*
@@ -55,7 +55,7 @@ app.post("/signup", function (req, res) {
                 email: email,
                 nombre: nombre,
             })
-                .then(function (newUserRef) {
+                .then((newUserRef) => {
                 res.json({
                     id: newUserRef.id,
                     new: true,
@@ -72,15 +72,15 @@ app.post("/signup", function (req, res) {
 });
 //AUTH
 //Metodo para autenticarse.
-app.post("/auth", function (req, res) {
+app.post("/auth", (req, res) => {
     //se le pasa por el body un email
-    var email = req.body.email; //es lo mismo que const email = req.body.email
+    const { email } = req.body; //es lo mismo que const email = req.body.email
     //Tomamos de referencia el signup pero
     //en caso de estar vacio el mail es que no se ha logueado
     userCollection
         .where("email", "==", email)
         .get()
-        .then(function (searchResponse) {
+        .then((searchResponse) => {
         //preguntamos si la respuesta llega vacia (es decir el email ingresado no existe)
         //devolvemos error
         if (searchResponse.empty) {
@@ -102,33 +102,33 @@ app.post("/auth", function (req, res) {
 });
 ///CREACION DE UN ROOM
 //Para crear al mismo tenemos que tener previamente un mail logueado con su id
-app.post("/rooms", function (req, res) {
+app.post("/rooms", (req, res) => {
     //Tomamos del body el userId
-    var userId = req.body.userId;
+    const { userId } = req.body;
     //Buscamos en la userscollection si existe ese Id de usuario
     //de existir lo buscamos y creamos una nueva ref en la rtdb
     userCollection
         .doc(userId.toString()) //lo pasamos a string por las dudas
         .get() //vamos a buscarlo
-        .then(function (doc) {
+        .then((doc) => {
         //nos devuelve en una promesa una referencia de ese doc
         //si este existe
         if (doc.exists) {
             //creamos una referencia en la rtdb con un id largo generado por nanoid
-            var refroomrtdb_1 = db_1.rtdb.ref("rooms/" + (0, nanoid_1.nanoid)(12));
+            const refroomrtdb = db_1.rtdb.ref("rooms/" + (0, nanoid_1.nanoid)(12));
             //le seteamos contenido. Objeto con dos propiedades:
             //array de mensajes vacio y owner que contiene el id de usuario q le pasamos
-            refroomrtdb_1
+            refroomrtdb
                 .set({
                 messages: [],
                 owner: userId, //id de usuario
             }) //devuelve una promesa
-                .then(function () {
+                .then(() => {
                 //generamos dos nuevas constantes:
                 //idRoom donde guardamos el id de la referencia
                 //newIdRoom es un id corto y sencillo de recordar generado con un random
-                var idRoom = refroomrtdb_1.key; //es igual al random de nanoid
-                var newIdRoom = 1000 + Math.floor(Math.random() * 999);
+                const idRoom = refroomrtdb.key; //es igual al random de nanoid
+                const newIdRoom = 1000 + Math.floor(Math.random() * 999);
                 //Vamos a la referencia de la rooms collection en firebase
                 //creamos un doc en las room con el id random facil de recordar
                 //le seteamos un objeto con la propiedad rtdbRoomUd con el id de la rtdb
@@ -137,7 +137,7 @@ app.post("/rooms", function (req, res) {
                     .set({
                     rtdbRoomId: idRoom, //id de la ref en la rtdb
                 })
-                    .then(function () {
+                    .then(() => {
                     //devuelve el id random sencillo de recordar.
                     //Este servira para acceder a este room en otro momento
                     res.json({
@@ -157,19 +157,19 @@ app.post("/rooms", function (req, res) {
 //Metodo para pedir el id complejo si tenemos el corto para acceder a un room existente
 //El metodo get no esta preparado para leer el body asi que va leer desde params
 //Estos se reciben desde el objeto query y params
-app.get("/rooms/:roomId", function (req, res) {
-    var userId = req.query.userId;
-    var roomId = req.params.roomId;
+app.get("/rooms/:roomId", (req, res) => {
+    const { userId } = req.query;
+    const { roomId } = req.params;
     userCollection
         .doc(userId.toString())
         .get()
-        .then(function (doc) {
+        .then((doc) => {
         if (doc.exists) {
             roomsCollection
                 .doc(roomId)
                 .get()
-                .then(function (snap) {
-                var data = snap.data(); //devuelve el objeto completo
+                .then((snap) => {
+                const data = snap.data(); //devuelve el objeto completo
                 res.json(data);
             });
         }
@@ -204,6 +204,6 @@ app.get("*", function (req, res) {
     res.sendFile(__dirname + "/dist/index.html");
 });
 //
-app.listen(port, function () {
-    console.log("Servidor inicializado en http://localhost:".concat(port));
+app.listen(port, () => {
+    console.log(`Servidor inicializado en http://localhost:${port}`);
 });

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES5",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "strictNullChecks": false
   },
