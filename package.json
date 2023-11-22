@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev-back": "nodemon ---watch ./back/index.ts --exec ts-node ./back/dev.ts",
+    "dev-back": "nodemon --watch ./back/index.ts --exec ts-node ./back/dev.ts",
     "dev-front": "parcel serve ./src/index.html",
     "build:front": "parcel build ./src/index.html",
     "build:back": "tsc",

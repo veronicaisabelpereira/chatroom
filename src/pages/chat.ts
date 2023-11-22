@@ -3,6 +3,11 @@ type Message = {
   fullName: String;
   message: String;
 };
+ /**
++   * Inicializa el componente suscribiéndose al estado y estableciendo los valores iniciales de 'messages' y 'room'.
++   * También registra los 'messages' y 'roomId' en la consola. Por último, renderiza el componente.
++   * 
++   */
 class Chat extends HTMLElement {
   fullName: String;
   message: String;
@@ -34,6 +39,11 @@ class Chat extends HTMLElement {
       state.pushMessage(message);
     });
     //Funcion para scrolear
+    /*
+    Este código define una función llamada scrollToBottom que desplaza un elemento de contenedor hasta el final. 
+    Esto lo logra estableciendo la propiedad scrollTop del elemento de contenedor a su propiedad scrollHeight. 
+    El operador ! se utiliza para asegurar que el elemento messagesContainer no sea nulo o no definido.
+     */
     const messagesContainer = this.querySelector(".messages__container");
     function scrollToBottom() {
       messagesContainer!.scrollTop = messagesContainer!.scrollHeight;

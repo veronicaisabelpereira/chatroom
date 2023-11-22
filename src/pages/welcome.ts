@@ -1,6 +1,22 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-
+/**
++   * Se ejecuta cuando el elemento se conecta por primera vez al DOM del documento.
++   * Registra los datos del estado.
++   * Obtiene el estado actual.
++   * Si rtdbRoomId y userId están presentes en el estado actual,
++   *   otorga acceso a la sala y navega a la ruta "/chatroom".
++   * Renderiza el elemento.
++   * Adjunta un event listener al evento "change" del elemento ".selection",
++   *   que muestra u oculta el elemento "#room-id__container" según el valor del elemento ".selection".
++   * Adjunta un event listener al evento "submit" del elemento ".form",
++   *   que evita el comportamiento de envío de formulario por defecto,
++   *   establece el correo electrónico y el nombre completo en el estado,
++   *   inicia sesión del usuario y establece el id de la sala en el estado.
++   * Navega a la ruta "/chatroom".
++   *
++   *  No hay valor de retorno.
++   */
 
 
 class Home extends HTMLElement {
@@ -50,6 +66,10 @@ class Home extends HTMLElement {
       Router.go("/chatroom");
     });
   }
+  /**
+   * Renderiza el contenido HTML del componente.
+   
+   */
   render() {
     this.innerHTML = `
         <div class="home__container container">
@@ -81,10 +101,6 @@ class Home extends HTMLElement {
     const style = document.createElement("style");
     style.innerHTML = `
       
-        .home__container{
-          
-          
-          }
           .form{
             width:65vw;
             background-color:white;
@@ -137,18 +153,3 @@ class Home extends HTMLElement {
 }
 
 customElements.define("home-page", Home);
-/*
-  .form{
-            position:relative;
-            top:50%;
-            display:flex;
-            flex-direction:column;
-            justify-content:space-between;
-            gap:15px;
-            width:65vw;
-            background-color:white;
-            padding:20px;
-            border-radius: 30px;
-            box-sizing: border-box;
-        }
- */
