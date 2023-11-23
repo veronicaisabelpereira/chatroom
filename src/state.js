@@ -4,7 +4,8 @@ exports.state = void 0;
 const db_1 = require("./db");
 //para tratar un objeto de objetos como un array
 const lodash_1 = require("lodash");
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://chatroom-fxip.onrender.com";
+//"http://localhost:3000";
 //
 const state = {
     data: {

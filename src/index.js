@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./pages/welcome");
 require("./pages/chat");
 require("./router");
-require("./db");
+//import "./db";
 const state_1 = require("./state");
 //inicializa el state revisando los msjs de la base de datos
 (function () {

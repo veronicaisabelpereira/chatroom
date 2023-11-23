@@ -1,4 +1,5 @@
 "use strict";
+/*
 /*IIMPORTS
 -express para la app
 -firestore y rtdb:
@@ -15,6 +16,7 @@ require("dotenv/config");
 const cors = require("cors");
 //
 const port = process.env.PORT || 3000;
+const ROOT_PATH = __dirname.replace("src/", "");
 const app = express();
 //Middleware
 app.use(express.static("dist"));
@@ -201,7 +203,7 @@ app.post("/messages", function (req, res) {
     });
 });
 app.get("*", function (req, res) {
-    res.sendFile(__dirname + "/dist/index.html");
+    res.sendFile(ROOT_PATH + "dist/index.html");
 });
 //
 app.listen(port, () => {
