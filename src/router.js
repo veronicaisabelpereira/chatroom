@@ -5,5 +5,5 @@ const router = new router_1.Router(document.querySelector(".root"));
 router.setRoutes([
     { path: "/", component: "home-page" },
     { path: "/chatroom", component: "chat-page" },
-    { path: ".*", redirect: "/" },
+    //{ path: ".*", redirect: "/" },
 ]);
